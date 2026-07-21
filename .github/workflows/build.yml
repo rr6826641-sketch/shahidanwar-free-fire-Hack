@@ -14,7 +14,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Unzip Any Zip Files
+    - name: Unzip Project Zip
       run: |
         unzip -o *.zip || true
 
@@ -29,15 +29,10 @@ jobs:
 
     - name: Build Debug APK
       run: |
-        GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
-        if [ -n "$GRADLEW_PATH" ]; then
-          DIR=$(dirname "$GRADLEW_PATH")
-          cd "$DIR"
-          chmod +x gradlew
-          ./gradlew assembleDebug
-        else
-          gradle assembleDebug
-        fi
+        GRADLE_DIR=$(find . -name "build.gradle" -not -path "*/app/*" | head -n 1)
+        PROJECT_DIR=$(dirname "$GRADLE_DIR")
+        cd "$PROJECT_DIR"
+        gradle :app:assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4

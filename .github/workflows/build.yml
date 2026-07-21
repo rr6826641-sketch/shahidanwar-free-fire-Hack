@@ -24,11 +24,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android NDK
-      uses: android-actions/setup-ndk@v3
-      with:
-        ndk-version: r25b
-
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 

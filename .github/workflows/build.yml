@@ -24,16 +24,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Find and Grant Permission to gradlew
-      run: |
-        find . -name "gradlew" -exec chmod +x {} +
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
-    - name: Build Debug APK
+    - name: Build Debug APK with System Gradle
       run: |
-        GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
-        PROJECT_DIR=$(dirname "$GRADLEW_PATH")
+        GRADLE_DIR=$(find . -name "build.gradle" -not -path "*/app/*" | head -n 1)
+        PROJECT_DIR=$(dirname "$GRADLE_DIR")
         cd "$PROJECT_DIR"
-        ./gradlew assembleDebug
+        gradle assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
